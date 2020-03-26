@@ -2,7 +2,17 @@ const http = require("http"); //Require http module
 
 //Create a http server
 const server = http.createServer((req, res) => {
-
+  res.end(
+    `<!DOCType html>
+      <html>
+        <body>
+          <form action="/message" method="post">
+            <input type="text" name="message/>
+            <input type="submit">
+          </form>
+        </body>
+      </html>
+    `)
 });
 
 //PORT

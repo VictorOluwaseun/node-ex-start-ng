@@ -7,8 +7,8 @@ const server = http.createServer((req, res) => {
       <html>
         <body>
           <form action="/message" method="post">
-            <input type="text" name="message/>
-            <input type="submit">
+            <input type="text" name="message" />
+            <input type="submit" value="Submit"/>
           </form>
         </body>
       </html>

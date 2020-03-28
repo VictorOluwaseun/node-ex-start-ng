@@ -1,35 +1,30 @@
 const http = require("http"); //Require http module
-const {
-  parse
-} = require("querystring");
+const path = require("path");
+const fs = require("fs");
+
+const collectRequestData = require("./collectRequestData");
+
+
+//Get the Form Template
+const filePath = path.join(__dirname, "public", "index.html");
+const formTemp = fs.readFileSync(filePath, "utf-8");
+
 
 //Create a http server
 const server = http.createServer((req, res) => {
-  if (req.method === "POST") {
-    let body = "";
-    req.on("data", chunk => {
-      body += chunk
-        .toString(); //Convert Buffer to string
+  if (req.url === "/") {
+    res.write(formTemp);
+  }
+  if (req.url === "/message" && req.method === "POST") {
+    collectRequestData(req, result => {
+      console.log(result.message);
+      res.end(`The data entered is ${result.message}`);
     })
-    req.on("end", () => {
-      const {
-        message
-      } = parse(body);
-      console.log(message);
-    })
-    res.end("ok");
   } else {
-    res.end(
-      `<!DOCType html>
-        <html>
-          <body>
-            <form action="/message" method="post">
-              <input type="text" name="message" />
-              <input type="submit" value="Submit"/>
-            </form>
-          </body>
-        </html>
-      `)
+    res.writeHead(404, {
+      "Content-type": "html/text"
+    });
+    res.end("<h1>Page Not Found</h1>");
   }
 });
 
